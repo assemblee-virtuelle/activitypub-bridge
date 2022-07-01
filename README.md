@@ -2,6 +2,8 @@
 
 # ActivityPub Bridge
 
+Currently supports sending messages to [Mattermost](https://mattermost.com) channels.
+
 ## Getting started
 
 Requirements:
