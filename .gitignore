@@ -1,0 +1,6 @@
+.idea
+.env.local
+.env.*.local
+/actors
+/node_modules
+/data

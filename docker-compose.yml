@@ -1,0 +1,25 @@
+version: '3.5'
+
+services:
+  fuseki:
+    image: semapps/jena-fuseki-webacl
+    container_name: fuseki
+    volumes:
+      - ./data/fuseki:/fuseki
+    ports:
+      - "3030:3030"
+    expose:
+      - "3030"
+    environment:
+      ADMIN_PASSWORD: "admin"
+
+  redis:
+    image: redis
+    container_name: redis
+    ports:
+      - "6379:6379"
+    expose:
+      - "6379"
+    volumes:
+      - ./data/redis:/data
+    command: ["redis-server", "--appendonly", "yes"]

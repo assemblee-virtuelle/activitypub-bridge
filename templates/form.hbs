@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+    <title>{{ title }}</title>
+    <meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
+    <link href="https://fonts.googleapis.com/css?family=Ubuntu&display=swap" rel="stylesheet">
+    <link href="/css/form.css" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flexboxgrid/6.3.1/flexboxgrid.min.css" type="text/css" >
+</head>
+<body class="page-user">
+<br/><br/>
+<div id="page">
+    <div id="main">
+        <div class="wrapper">
+            <div id="title-page">
+                <h1>{{ title }}</h1>
+            </div>
+            <div class="region region-content">
+                <div class="block block-system block-main" id="block-system-main">
+                    <div class="content">
+                        <form accept-charset="UTF-8" action="/{{ id }}" id="user-profile-form" method="post">
+                            <div class="messages error" id="error-message" style="display: none"></div>
+                            {{#ifCond message '===' 'updated' }}
+                                <div class="messages success" id="success-message">La passerelle a bien été mise à jour.</div>
+                            {{/ifCond}}
+                            {{#ifCond message '===' 'created' }}
+                                <div class="messages success" id="success-message">La passerelle a été créé avec succès.</div>
+                            {{/ifCond}}
+                            {{#ifCond message '===' 'deleted' }}
+                                <div class="messages success" id="success-message">La passerelle a été supprimée.</div>
+                            {{/ifCond}}
+                            {{#ifCond message '===' 'actor-not-found' }}
+                                <div class="messages error">L'acteur ActivityPub n'a pas pu être trouvé.</div>
+                            {{/ifCond}}
+                            {{#ifCond message '===' 'webhook-not-working' }}
+                                <div class="messages error">Le webhook fourni n'est pas valide.</div>
+                            {{/ifCond}}
+                            <div class="form-wrapper" id="edit-account">
+                                <div class="form-item form-type-textfield form-item-mail">
+                                    <label for="actorUri">Acteur ActivityPub à suivre
+                                        <span class="form-required" title="Ce champ est requis.">*</span>
+                                    </label>
+                                    <input class="form-text required" id="actorUri" name="actorUri" placeholder="URL ou adresse Webfinger (@username@domain.tld)" type="text" value="{{bridge.actorUri}}" required {{#if id }}disabled{{/if}}>
+                                </div>
+                            </div>
+                            <br/>
+                            <div class="form-wrapper" id="edit-account">
+                                <div class="form-item form-type-textfield form-item-mail">
+                                    <label for="webhookUri">Webhook Mattermost
+                                        <span class="form-required" title="Ce champ est requis.">*</span>
+                                    </label>
+                                    <input class="form-text required" id="webhookUri" name="webhookUri" placeholder="https://" type="text" value="{{bridge.webhookUri}}" required>
+                                    <div class="description">Veuillez suivre la <a href="https://docs.mattermost.com/developer/webhooks-incoming.html" target="_blank">documentation</a> pour savoir comment créer un webhook. Un message de test sera envoyé à l'activation pour vérifier le webhook.</div>
+                                </div>
+                            </div>
+                            <br/>
+                            <div class="form-wrapper" id="edit-account">
+                                <div class="form-item form-type-textfield form-item-mail">
+                                    <label for="email">Votre adresse mail
+                                         <span class="form-required" title="Ce champ est requis.">*</span>
+                                    </label>
+                                    <input class="form-text required" id="email" maxlength="254" name="email" type="email" value="{{bridge.email}}" required>
+                                    <div class="description">Sera utilisée uniquement pour envoyer un lien unique vous permettant de retrouver et modifier ces informations ultérieurement.</div>
+                                </div>
+                            </div>
+                            <br/>
+                        <div class="buttons">
+                            {{#if id }}
+                                <div class="divide">
+                                    <input class="form-submit" id="edit-submit" type="submit" value="Mettre à jour">
+                                </div>
+                                <div class="divide">
+                                    <input class="form-submit" id="edit-submit" type="submit" value="Supprimer" name="remove" formnovalidate>
+                                </div>
+                            {{else}}
+                                <input class="form-submit" id="edit-submit" type="submit" value="Créer">
+                            {{/if}}
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+</body>
+</html>
