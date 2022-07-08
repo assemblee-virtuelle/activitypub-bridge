@@ -29,8 +29,8 @@ module.exports = {
 
         const bridge = await ctx.call('bridge.get', { id: `urn:Bridge:${id}` });
 
-        // Do not await bot deletion as it takes 10 secondes
-        this.deleteBot(ctx, bridge);
+        // Do not await bot deletion as it takes 10+ seconds
+        ctx.call('bots.delete', { resourceUri: bridge.botUri });
 
         await ctx.call('bridge.remove', { id: bridge['@id'] });
 
@@ -159,15 +159,15 @@ module.exports = {
       }
     },
     async getActorUri(ctx, actor) {
-      if( actor.startsWith('http') ) {
+      if (actor.startsWith('http')) {
         try {
-          await ctx.call('activitypub.actor.get', { actorUri: actor });
+          await ctx.call('activitypub.actor.get', {actorUri: actor});
           return actor;
-        } catch(e) {
+        } catch (e) {
           return null;
         }
       } else {
-        return await ctx.call('webfinger.getRemoteUri', { account: actor });
+        return await ctx.call('webfinger.getRemoteUri', {account: actor});
       }
     },
     async checkWebhook(ctx, webhookUri) {
@@ -180,28 +180,6 @@ module.exports = {
           footer: "N'hésitez pas à supprimer ce message une fois lu"
         }
       })
-    },
-    async deleteBot(ctx, bridge) {
-      const bot = await ctx.call('activitypub.actor.get', { actorUri: bridge.botUri });
-
-      // Unfollow actor
-      await ctx.call('activitypub.outbox.post', {
-        collectionUri: bot.outbox,
-        actor: bot.id,
-        type: ACTIVITY_TYPES.UNDO,
-        object: {
-          type: ACTIVITY_TYPES.FOLLOW,
-          object: bridge.actorUri
-        },
-        to: [bridge.actorUri, PUBLIC_URI]
-      });
-
-      // Wait 10s to give time to actor to check message identity
-      await delay(10000);
-
-      await ctx.call('bots.delete', {
-        resourceUri: bridge.botUri,
-      });
     }
   }
 };
