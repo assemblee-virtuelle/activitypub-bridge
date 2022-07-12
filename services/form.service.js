@@ -9,14 +9,22 @@ module.exports = {
   actions: {
     async display(ctx) {
       const { id, message } = ctx.params;
-      const bridge = id ? await ctx.call('bridge.get', { id: `urn:Bridge:${id}` }) : {};
+      let bridge = {};
+
+      if (id) {
+        bridge = await ctx.call('bridge.get', { id: `urn:Bridge:${id}` });
+        if (!bridge['@id']) {
+          ctx.meta.$statusCode = 404;
+          return;
+        }
+      }
 
       ctx.meta.$responseType = 'text/html';
       return this.formTemplate({
         title: 'Passerelle Mattermost',
         message,
         bridge,
-        id: bridge['@id'] ? bridge['@id'].substring(11) : undefined
+        id
       });
     },
     async process(ctx) {
@@ -87,6 +95,8 @@ module.exports = {
           object: actorUri,
           to: [actorUri, PUBLIC_URI]
         });
+
+        // TODO wait to receive Accept activity in bot inbox
 
         const bridge = await ctx.call('bridge.create', {
           botUri,
