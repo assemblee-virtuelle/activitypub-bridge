@@ -20,7 +20,7 @@ module.exports = {
       });
     },
     async process(ctx) {
-      let { remove, id, email, actorUri, webhookUri } = ctx.params;
+      let { remove, id, email, actorUri, webhookUri, channel } = ctx.params;
 
       if (remove) {
         //////////////////////////////////////////////////////
@@ -46,18 +46,19 @@ module.exports = {
           throw new Error('Actor cannot be changed. Delete this bridge and recreate it.')
         }
 
-        if (webhookUri !== bridge.webhookUri) {
-          const webhookSent = await this.checkWebhook(ctx, webhookUri);
-          if (!webhookSent) return this.redirectToForm(ctx, 'webhook-not-working');
+        if (webhookUri !== bridge.webhookUri || channel !== bridge.channel) {
+          const webhookSent = await this.checkWebhook(ctx, webhookUri, channel);
+          if (!webhookSent) return this.redirectToForm(ctx, 'webhook-not-working', id);
         }
 
         await ctx.call('bridge.update', {
           ...bridge,
           email,
-          webhookUri
+          webhookUri,
+          channel
         });
 
-        return this.redirectToForm(ctx, 'updated', bridge['@id']);
+        return this.redirectToForm(ctx, 'updated', id);
       } else {
         //////////////////////////////////////////////////////
         // CREATE BRIDGE
@@ -66,7 +67,7 @@ module.exports = {
         actorUri = await this.getActorUri(ctx, actorUri)
         if( !actorUri ) return this.redirectToForm(ctx, 'actor-not-found');
 
-        const webhookSent = await this.checkWebhook(ctx, webhookUri);
+        const webhookSent = await this.checkWebhook(ctx, webhookUri, channel);
         if (!webhookSent) return this.redirectToForm(ctx, 'webhook-not-working');
 
         const botUri = await ctx.call('bots.post', {
@@ -77,26 +78,29 @@ module.exports = {
           contentType: MIME_TYPES.JSON
         });
 
-        // const bot = await ctx.call('activitypub.actor.awaitCreateComplete', { actorUri: botUri });
-        //
-        // await ctx.call('activitypub.outbox.post', {
-        //   collectionUri: bot.outbox,
-        //   actor: bot.id,
-        //   type: ACTIVITY_TYPES.FOLLOW,
-        //   object: actorUri,
-        //   to: [actorUri, PUBLIC_URI]
-        // });
+        const bot = await ctx.call('activitypub.actor.awaitCreateComplete', { actorUri: botUri });
+
+        await ctx.call('activitypub.outbox.post', {
+          collectionUri: bot.outbox,
+          actor: bot.id,
+          type: ACTIVITY_TYPES.FOLLOW,
+          object: actorUri,
+          to: [actorUri, PUBLIC_URI]
+        });
 
         const bridge = await ctx.call('bridge.create', {
           botUri,
           email,
           actorUri,
-          webhookUri
+          webhookUri,
+          channel
         });
 
-        // TODO send email to admin
+        const bridgeId = bridge['@id'].substring(11);
 
-        return this.redirectToForm(ctx, 'created', bridge['@id']);
+        ctx.call('mailer.sendConfirmation', { email, bridgeId });
+
+        return this.redirectToForm(ctx, 'created', bridgeId);
       }
     }
   },
@@ -150,12 +154,12 @@ module.exports = {
     this.formTemplate = Handlebars.compile(templateFile.toString());
   },
   methods: {
-    redirectToForm(ctx, message, id) {
+    redirectToForm(ctx, message, bridgeId) {
       ctx.meta.$statusCode = 302;
-      if (id) {
-        ctx.meta.$location = `/${id.substring(11)}?message=${encodeURI(message)}`;
+      if (bridgeId) {
+        ctx.meta.$responseHeaders = { Location: `/${bridgeId}?message=${encodeURI(message)}` };
       } else {
-        ctx.meta.$location = `/?message=${encodeURI(message)}`;
+        ctx.meta.$responseHeaders = { Location: `/?message=${encodeURI(message)}` };
       }
     },
     async getActorUri(ctx, actor) {
@@ -170,9 +174,10 @@ module.exports = {
         return await ctx.call('webfinger.getRemoteUri', {account: actor});
       }
     },
-    async checkWebhook(ctx, webhookUri) {
+    async checkWebhook(ctx, webhookUri, channel) {
       return await ctx.call('mattermost.postMessage', {
         webhookUri,
+        channel,
         message: {
           title: 'Succès !',
           text: "La passerelle ActivityPub-Mattermost a bien été activée !",

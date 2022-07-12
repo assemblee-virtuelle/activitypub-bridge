@@ -11,9 +11,9 @@ module.exports = {
   },
   dependencies: ['triplestore'],
   actions: {
-    async findByEmail(ctx) {
-      const { email } = ctx.params;
-      const subscriptions = await this._find(ctx, { query: { email } });
+    async findByBotUri(ctx) {
+      const { botUri } = ctx.params;
+      const subscriptions = await this._find(ctx, { query: { botUri } });
       return subscriptions.length > 0 ? subscriptions[0] : null;
     }
   }

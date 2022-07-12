@@ -15,11 +15,11 @@ module.exports = {
   },
   actions: {
     async postMessage(ctx) {
-      const { webhookUri, message } = ctx.params;
+      const { webhookUri, channel, message } = ctx.params;
 
       const attachment = {
         ...this.settings.defaultMessage.attachments[0],
-        ...message,
+        ...message
       };
 
       if( !attachment.fallback ) attachment.fallback = attachment.text;
@@ -30,6 +30,7 @@ module.exports = {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
+          channel,
           ...this.settings.defaultMessage,
           attachments: [attachment]
         })

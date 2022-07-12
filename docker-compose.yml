@@ -23,3 +23,11 @@ services:
     volumes:
       - ./data/redis:/data
     command: ["redis-server", "--appendonly", "yes"]
+
+  mailcatcher:
+    image: dockage/mailcatcher:0.7.1
+    container_name: mailcatcher
+    ports:
+      - "1080:1080"
+      - "1025:1025"
+    restart: on-failure

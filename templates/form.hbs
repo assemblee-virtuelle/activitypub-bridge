@@ -35,14 +35,14 @@
                                 <div class="messages error">L'acteur ActivityPub n'a pas pu être trouvé.</div>
                             {{/ifCond}}
                             {{#ifCond message '===' 'webhook-not-working' }}
-                                <div class="messages error">Le webhook fourni n'est pas valide.</div>
+                                <div class="messages error">Le webhook ou le canal fourni n'est pas valide. Le message de test n'a pas pu être envoyé.</div>
                             {{/ifCond}}
                             <div class="form-wrapper" id="edit-account">
                                 <div class="form-item form-type-textfield form-item-mail">
                                     <label for="actorUri">Acteur ActivityPub à suivre
                                         <span class="form-required" title="Ce champ est requis.">*</span>
                                     </label>
-                                    <input class="form-text required" id="actorUri" name="actorUri" placeholder="URL ou adresse Webfinger (@username@domain.tld)" type="text" value="{{bridge.actorUri}}" required {{#if id }}disabled{{/if}}>
+                                    <input class="form-text required" id="actorUri" name="actorUri" placeholder="URL ou adresse Webfinger (@username@domain.tld)" type="text" value="{{bridge.actorUri}}" required {{#if id }}readonly{{/if}}>
                                 </div>
                             </div>
                             <br/>
@@ -53,6 +53,14 @@
                                     </label>
                                     <input class="form-text required" id="webhookUri" name="webhookUri" placeholder="https://" type="text" value="{{bridge.webhookUri}}" required>
                                     <div class="description">Veuillez suivre la <a href="https://docs.mattermost.com/developer/webhooks-incoming.html" target="_blank">documentation</a> pour savoir comment créer un webhook. Un message de test sera envoyé à l'activation pour vérifier le webhook.</div>
+                                </div>
+                            </div>
+                            <br/>
+                            <div class="form-wrapper" id="edit-account">
+                                <div class="form-item form-type-textfield form-item-mail">
+                                    <label for="webhookUri">Canal</label>
+                                    <input class="form-text" id="channel" name="channel" type="text" value="{{bridge.channel}}">
+                                    <div class="description">Identifiant du canal où poster le message (la fin de l'URL du canal, pas le titre). Si non spécifié, le canal par défaut configuré pour le webhook sera utilisé.</div>
                                 </div>
                             </div>
                             <br/>
