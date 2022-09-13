@@ -1,24 +1,15 @@
 {
-  "name": "colibris.social",
-  "private": true,
-  "version": "0.4.0",
+  "name": "activitypub-bridge",
+  "version": "1.0.0",
   "license": "Apache-2.0",
   "scripts": {
     "dev": "moleculer-runner --repl --hot services",
     "start": "moleculer-runner --instances=max services",
-    "link-semapps-packages": "yarn link @semapps/activitypub @semapps/auth @semapps/backup @semapps/fuseki-admin @semapps/importer @semapps/inference @semapps/jsonld @semapps/ldp @semapps/middlewares @semapps/notifications @semapps/mime-types @semapps/signature @semapps/sparql-endpoint @semapps/triplestore @semapps/webacl @semapps/webfinger @semapps/webhooks @semapps/webid"
+    "link-semapps-packages": "yarn link @semapps/activitypub @semapps/auth @semapps/backup @semapps/core @semapps/importer @semapps/inference @semapps/jsonld @semapps/ldp @semapps/middlewares @semapps/mirror @semapps/notifications @semapps/mime-types @semapps/signature @semapps/sparql-endpoint @semapps/triplestore @semapps/void @semapps/webacl @semapps/webfinger @semapps/webhooks @semapps/webid"
   },
   "dependencies": {
-    "@semapps/activitypub": "0.4.0-alpha.38",
-    "@semapps/auth": "0.4.0-alpha.38",
-    "@semapps/fuseki-admin": "0.4.0-alpha.38",
-    "@semapps/jsonld": "0.4.0-alpha.38",
-    "@semapps/ldp": "0.4.0-alpha.38",
-    "@semapps/mime-types": "0.4.0-alpha.38",
-    "@semapps/signature": "0.4.0-alpha.38",
-    "@semapps/sparql-endpoint": "0.4.0-alpha.38",
-    "@semapps/triplestore": "0.4.0-alpha.38",
-    "@semapps/webfinger": "0.4.0-alpha.38",
+    "@semapps/auth": "0.4.0-alpha.43",
+    "@semapps/core": "0.4.0-alpha.43",
     "dotenv-flow": "^3.1.0",
     "express-session": "^1.17.2",
     "handlebars": "^4.7.7",
