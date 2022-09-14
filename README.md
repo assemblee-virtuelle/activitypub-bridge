@@ -2,7 +2,11 @@
 
 # ActivityPub Bridge
 
-Currently supports sending messages to [Mattermost](https://mattermost.com) channels.
+Subscribe to ActivityPub actors and send their activities in given chat channels.
+
+Currently only supports [Mattermost](https://mattermost.com). Slack and Rocketchat support coming soon.
+
+![Capture d’écran de 2022-09-14 19-08-18](https://user-images.githubusercontent.com/17931931/190218801-3f77ed31-c557-46a1-9af8-27f1e83982ca.png)
 
 ## Getting started
 
