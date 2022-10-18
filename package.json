@@ -9,8 +9,8 @@
     "unlink-semapps-packages": "yarn unlink @semapps/activitypub @semapps/auth @semapps/backup @semapps/core @semapps/importer @semapps/inference @semapps/jsonld @semapps/ldp @semapps/middlewares @semapps/mirror @semapps/notifications @semapps/mime-types @semapps/signature @semapps/sparql-endpoint @semapps/triplestore @semapps/void @semapps/webacl @semapps/webfinger @semapps/webhooks @semapps/webid"
   },
   "dependencies": {
-    "@semapps/auth": "0.4.0-alpha.46",
-    "@semapps/core": "0.4.0-alpha.46",
+    "@semapps/auth": "0.4.0-alpha.47",
+    "@semapps/core": "0.4.0-alpha.47",
     "dotenv-flow": "^3.1.0",
     "express-session": "^1.17.2",
     "handlebars": "^4.7.7",
@@ -26,6 +26,7 @@
     "node-fetch": "2.6.7",
     "showdown": "^2.1.0",
     "speakingurl": "^14.0.1",
+    "turndown": "^7.1.1",
     "url-join": "^4.0.1"
   }
 }
