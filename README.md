@@ -8,6 +8,10 @@ Currently only supports [Mattermost](https://mattermost.com). Slack and Rocketch
 
 ![Capture d’écran de 2022-09-14 19-08-18](https://user-images.githubusercontent.com/17931931/190218801-3f77ed31-c557-46a1-9af8-27f1e83982ca.png)
 
+## Running instances
+
+- https://passerelles.colibris-outilslibres.org
+
 ## Getting started
 
 Requirements:
