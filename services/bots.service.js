@@ -7,7 +7,8 @@ module.exports = {
   settings: {
     path: '/bots',
     acceptedTypes: [ACTOR_TYPES.APPLICATION],
-    dereference: ['sec:publicKey']
+    dereference: ['sec:publicKey'],
+    readOnly: true
   },
   events: {
     async 'activitypub.inbox.received'(ctx) {

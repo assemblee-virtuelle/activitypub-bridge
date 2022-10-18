@@ -16,7 +16,7 @@ module.exports = [
       author_link: '{{activity.actor.id}}',
       author_icon: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/48/Mastodon_Logotype_%28Simple%29.svg/216px-Mastodon_Logotype_%28Simple%29.svg.png',
       pretext: "New message on Mastodon",
-      text: '{{{activity.object.content}}}'
+      text: '{{{htmlToMarkdown activity.object.content}}}'
     }
   },
 ];
